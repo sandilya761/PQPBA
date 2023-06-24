@@ -1,0 +1,30 @@
+
+Registration:
+
+100 users: 0.0024587270200572674 (seconds)
+
+1000 users: 0.0023904722410297836 (seconds)
+
+10000 users: 0.0023601511677883535 (seconds)
+
+ 
+Authentication:
+
+100 users: 0.0013290090800364852 (seconds)
+
+1000 users: 0.0013247010209015571 (seconds)
+
+10000 users: 0.0012878330994222779 (seconds)
+
+Key rotation:
+
+100 users: 0.0011807984298502561 (seconds)
+
+1000 users:0.0016841128720298001
+
+10000 users:   
+
+
+ 
+
+
