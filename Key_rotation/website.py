@@ -50,6 +50,7 @@ def compute_new_b():
     bA = np.add(bA,error)%q
     end_time = timeit.default_timer()
     total_time = end_time - start_time
+    print("Value of b updated!!")
     print("\nTotal time taken in seconds: ", end_time - start_time)
     # new computed matrix is stored in datbase.
     np.savetxt('../Website_database/b.txt',bA)
