@@ -76,6 +76,7 @@ def compute_b():
     
     end_time = timeit.default_timer()
     total_time = end_time - start_time
+    print("Registration Success!!")
     print("\nTotal time taken in seconds: ", end_time - start_time)
     # Storing the matrices at database
     np.savetxt('../Website_database/A.txt',A) 
