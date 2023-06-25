@@ -12,7 +12,7 @@ import os
 
 def compute_password_matrix():
     m = 752
-    iters = 1000
+    iters = 10000
     ''' first parameter is the hashing algortihm type and second parameteris the password string, third is the 
     salt string and last one is iterations
     '''
