@@ -5,6 +5,11 @@ Our protocol contains three stages. They are:
 2. Authentication phase
 3. Key rotation phase
 
+ML socket library is required to execute our code. This can be installed as follows:
+       
+        pip install mlsocket --user
+
+
 Along with above mentioned phases, We also include a benchmarking directory for the performance reference. Following are the commands for 
 executing the benchmarking directory.
 
