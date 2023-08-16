@@ -8,15 +8,24 @@ import sys
 from numpy import random
 import timeit
 import password_matrix
+import inv
+from operator import matmul
 
-# Initializes the value of m and n
-n = 752
 
 def compute_new_b():
-    # loads the value of a from the database
+    # Initializes the value of m and n
+    n = 256
+    m = 256
+    q = 8380417
+    # loads the value of a from website database
     # Matrix A is loaded from A.txt file
     A = np.loadtxt('../Website_database/A.txt') 
     A = A.astype(int)
+
+    # loads the value of matrix b from website database
+    b = np.loadtxt('../Website_database/b.txt')
+    b = b.astype(float)
+    bA = b.reshape((m,1))
 
     # A connection is established to receive the error matrix and secret key. 
     HOST = '127.0.0.1'
@@ -31,29 +40,35 @@ def compute_new_b():
         # This will block until it receives all the data send by the client, with the step size of 1024 bytes.
         with conn:
             sA = conn.recv(1024)
-            error = conn.recv(1024) 
-    
+            eA = conn.recv(1024) 
     
     # user chosen password is mapped into a matrix
     P = password_matrix.compute_password_matrix()
 
-    # K = value of xor of secret key matrix and password matrix
-    
-    K = np.bitwise_xor(sA,P) 
-     
-    
-    # value of q (field size) for computing the lwe problem.
-    q= 2**15
+    # compute inverse of matrix A
+    inv_a = inv.inversematrix(A,q)
 
-    # value of b is computed
-    bA = np.matmul(A,K)%q
-    bA = np.add(bA,error)%q
+    x = np.subtract(bA%q,eA%q) # (b-e) mod q
+    x = x%q
+    
+    x = matmul(inv_a,x)
+    final = x%q # final = secret value xor password = K
+    # convert the float value to int 
+    final = final.astype(int)
+    final = final.reshape((m,1))
+    
+    # received sA = old_sA xor new_sA. So, sA xor old_sA xor password = new_sA xor Password
+    K_new = np.bitwise_xor(sA,final)
+    # new value of b is computed
+    b_new = np.matmul(A,K_new)%q
+    b_new = np.add(b_new,eA)%q
+    
     end_time = timeit.default_timer()
     total_time = end_time - start_time
     print("Value of b updated!!")
     print("\nTotal time taken in seconds: ", end_time - start_time)
     # new computed matrix is stored in datbase.
-    np.savetxt('../Website_database/b.txt',bA)
+    np.savetxt('../Website_database/b.txt',b_new)
 
 
 if __name__ == '__main__':

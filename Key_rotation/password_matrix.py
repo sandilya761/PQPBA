@@ -11,20 +11,20 @@ from hashlib import pbkdf2_hmac
 import os
 
 def compute_password_matrix():
-    m = 752
+    m = 256
     iters = 10000
     ''' first parameter is the hashing algortihm type and second parameteris the password string, third is the 
     salt string and last one is iterations
     '''
     salt = b'saltsalt'
-    password = b'password'
+    password = b'password@123!0$'
     dk = pbkdf2_hmac('sha512', password, salt, iters)
 
     password_hex = dk.hex()
     password_int = int(password_hex,16)
     s = str(int(password_hex,16))
     # password string is appended with 0s until the length of the string is equal to m value 
-    while(len(s)!=752):
+    while(len(s)!=256):
         s = s + '0'
 
     pwd = np.array(list(s), dtype=int)

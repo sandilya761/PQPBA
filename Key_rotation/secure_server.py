@@ -10,8 +10,9 @@ from numpy import random
 from mlsocket import MLSocket
 
 # creates a new secret key new_sA
-n = 752
-new_sA = np.random.randint(0,(2**15)-1,size = (n,1))
+n = 256
+q = 8380417
+new_sA = np.random.randint(0,(q)-1,size = (n,1))
 
 
 
@@ -33,7 +34,8 @@ def gen_new_key():
     # loads the error matrix from error.txt file
     ea = np.loadtxt('../Secure_server_database/error.txt')
     ea = ea.astype(float)
-    # converts the size form (752,) to (752,1)
+    
+    # converts the size form (256,) to (256,1)
     eA = ea.reshape((n,1))
     
     # sends the sA value and eA to the website
