@@ -14,8 +14,7 @@ Parameters of the LWE problem:
     m:- number of equations
     n:- number of variables
 
-Values of m and n are taken as per paper "Frodo: Take off the ring!
-Practical, Quantum-Secure Key Exchange from LWE"
+Values of m and n are same as mentioned for Dilithium NIST round 3 specifications
 '''
 
 from mlsocket import MLSocket
@@ -26,8 +25,8 @@ import timeit
 import password_matrix
 
 # Initialize the value of m and n 
-m = 752
-n = 752
+m = 256
+n = 256
 
 
 def compute_b():
@@ -39,6 +38,7 @@ def compute_b():
     ba = np.loadtxt('../Website_database/b.txt')
     ba = ba.astype(float)
     bA = ba.reshape((m,1))
+    
     
     # connects with secure server to obtain secret key and error matrix
     HOST = '127.0.0.1'
@@ -62,7 +62,7 @@ def compute_b():
     # K = value of xor of secret key matrix and password matrix
     K = np.bitwise_xor(data,P) 
     # value of q (field size) for computing the lwe problem.
-    q=2**15
+    q=8380417
     
     # computes the value of b from the given password and compares with existing b value in website_database.
     bA_new = np.matmul(A,K)%q

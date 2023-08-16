@@ -13,7 +13,7 @@ def send_sA_eA():
     HOST = '127.0.0.1'
     PORT = 65435
 
-    n = 752
+    n = 256
     # secret key matrix is loaded from secret_key.txt
     sa = np.loadtxt('../Secure_server_database/secret_key.txt')
     sa = sa.astype(int)
