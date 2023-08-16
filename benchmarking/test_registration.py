@@ -25,26 +25,26 @@ import password_matrix
 
 # value of q for computing the lwe problem is picked at random
 
-q=2**15
+q=8380417
 #print("Value of q\n",q)
 
 # value of m and n
-m = 752
-n = 752
+m = 256
+n = 256
 
 # empty list to store all the values of b
 l_b = [] 
-for i in range(0,100):
+for i in range(0,1):
     start_time = timeit.default_timer()
     # The random matrix a is generated
 
-    A = np.random.randint(0,(2**15)-1,size = (m,n))
+    A = np.random.randint(0,(q)-1,size = (m,n))
      
 
     #print("Value of random matrix A is: \n",A)
 
     # secret key matrix is generated
-    sA = np.random.randint(0,(2**15)-1,size = (n,1)) 
+    sA = np.random.randint(0,(q)-1,size = (n,1)) 
     # error matrix 
     # Set the desired range for the normal distribution
     lower_bound = -q/4
@@ -72,11 +72,15 @@ for i in range(0,100):
     #print(bA)
     
     #print ("Print output\n",bA.size)
-
+    np.savetxt('A.txt',A)
+    np.savetxt('b.txt',bA)
+    np.savetxt('error.txt',eA)
+    np.savetxt('secret_key.txt',sA)
     end_time = timeit.default_timer()
     l_b.append(end_time - start_time)
+    
 #print(len(l_b))
 
 # prints the total time taken to run the program.
-print(sum(l_b)/100)
+print(sum(l_b)/1)
 #print("Total time taken in seconds: ",end_time - start_time)

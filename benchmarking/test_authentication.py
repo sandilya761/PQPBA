@@ -25,18 +25,18 @@ import multiprocessing as mp
 
 # value of q for computing the lwe problem is picked at random
 
-q=2**15
+q=8380417
 #print("Value of q\n",q)
 
 # value of m and n
-m = 752
-n = 752
+m = 256
+n = 256
 
 # empty list to store all the values of b
 l_b = []
 
-for i in range(0,100):
-        
+for i in range(0,1):
+    start_time = timeit.default_timer()    
     # The random matrix a is generated
     A = np.loadtxt('A.txt')
     A = A.astype(int)
@@ -58,7 +58,7 @@ for i in range(0,100):
     ba = ba.astype(float)
     bA = ba.reshape((m,1))
 
-    start_time = timeit.default_timer()
+    
     # user chosen password is mapped into a matrix 
     P = password_matrix.compute_password_matrix()
         
