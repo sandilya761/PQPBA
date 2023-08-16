@@ -14,8 +14,8 @@ Parameters of the LWE problem:
     m:- number of equations
     n:- number of variables
 
-Values of m and n are taken as per paper "Frodo: Take off the ring!
-Practical, Quantum-Secure Key Exchange from LWE"
+Values of m and n are taken same as Dilithium parameters as suggested in 
+round 3 NIST report"
 '''
 
 from mlsocket import MLSocket
@@ -26,11 +26,11 @@ import timeit
 import password_matrix
 
 # Initialize the values of m and n respectively.
-m = 752
-n = 752
+m = 256
+n = 256
 
 # error matrix is generated using normal distribution function
-q = 2**15 # value of q (field size) for computing the lwe problem.
+q = 8380417 # value of q (field size) for computing the lwe problem.
 # Set the desired range for the normal distribution
 lower_bound = -q/4
 upper_bound = q/4
@@ -61,18 +61,18 @@ def compute_b():
     #print("Secret key obtained from secure server: \n",data)
     
     # The random matrix a is generated
-    A = np.random.randint(0,(2**15)-1,size = (m,n))
+    A = np.random.randint(0,(q)-1,size = (m,n))
      
     
     # user chosen password is mapped into a matrix
     P = password_matrix.compute_password_matrix()
     # K = value of xor of secret key matrix and password matrix
     K = np.bitwise_xor(data, P) 
-
+    K = K%q
     
     bA = np.matmul(A,K)%q
     bA = np.add(bA,eA)%q
-    #print("\nValue of b: \n",bA)
+    #print("\nValue of b: \n",bA.shape)
     
     end_time = timeit.default_timer()
     total_time = end_time - start_time

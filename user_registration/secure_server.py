@@ -2,7 +2,6 @@
 As per protocols mentioned in the paper, secure server stores creates a secret matrix
 and sends it to the website. Website creates error matrix eA computes the value of b and sends
 the error matrix back to the secure server.
-
 '''
 
 from mlsocket import MLSocket
@@ -14,9 +13,10 @@ def send_sA():
     HOST = '127.0.0.1'
     PORT = 65435
 
-    n = 752
+    n = 256
+    q = 8380417
     # secret key matrix is generated
-    sA = np.random.randint(0,(2**15)-1,size = (n,1)) 
+    sA = np.random.randint(0,q-1,size = (n,1)) 
     # Send data
     with MLSocket() as s:
         # Connect to the port and host
