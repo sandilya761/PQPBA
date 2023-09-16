@@ -36,7 +36,7 @@ n = 256
 
 # empty list to store all the values of b
 l_b = [] 
-for i in range(0,1):
+for i in range(0,100):
     
     # The random matrix a is generated
     A = np.loadtxt('A.txt')
@@ -102,10 +102,19 @@ for i in range(0,1):
     bA_new = np.add(bA_new,eA)%q
     '''
     end_time = timeit.default_timer()
-    l_b.append(end_time - start_time)
-    
+    t = end_time - start_time
+    l_b.append(t)
+#print(len(l_b))
+g = sum(l_b)/100
+print(g)
+# prints the total time taken to run the program.
+print("time in milliseconds: ",g*1000)
+
+#print("Total time taken in seconds: ",end_time - start_time)
+
+
 #print(len(l_b))
 
 # prints the total time taken to run the program.
-print(sum(l_b)/1)
+#print(sum(l_b)/1)
 #print("Total time taken in seconds: ",end_time - start_time)
