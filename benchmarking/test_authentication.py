@@ -35,8 +35,8 @@ n = 256
 # empty list to store all the values of b
 l_b = []
 
-for i in range(0,1):
-    start_time = timeit.default_timer()    
+for i in range(0,100):
+        
     # The random matrix a is generated
     A = np.loadtxt('A.txt')
     A = A.astype(int)
@@ -58,7 +58,7 @@ for i in range(0,1):
     ba = ba.astype(float)
     bA = ba.reshape((m,1))
 
-    
+    start_time = timeit.default_timer()
     # user chosen password is mapped into a matrix 
     P = password_matrix.compute_password_matrix()
         
@@ -78,10 +78,14 @@ for i in range(0,1):
     #print ("Print output\n",bA.size)
 
     end_time = timeit.default_timer()
-l_b.append(end_time - start_time)
+    #l_b.append(end_time - start_time)
+    t = end_time - start_time
+    l_b.append(t)
 #print(len(l_b))
-
+g = sum(l_b)/100
+print(g)
 # prints the total time taken to run the program.
-print(sum(l_b)/100)
+print("time in milliseconds: ",g*1000)
+
 #print("Total time taken in seconds: ",end_time - start_time)
 
