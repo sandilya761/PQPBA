@@ -34,8 +34,8 @@ n = 256
 
 # empty list to store all the values of b
 l_b = [] 
-for i in range(0,1):
-    start_time = timeit.default_timer()
+for i in range(0,100):
+    
     # The random matrix a is generated
 
     A = np.random.randint(0,(q)-1,size = (m,n))
@@ -60,6 +60,7 @@ for i in range(0,1):
     eA = np.clip(eA, lower_bound, upper_bound)
 
     # user chosen password is mapped into a matrix 
+    start_time = timeit.default_timer()
     P = password_matrix.compute_password_matrix()
     
     # K = value of xor of secret key matrix and password matrix
@@ -72,15 +73,24 @@ for i in range(0,1):
     #print(bA)
     
     #print ("Print output\n",bA.size)
+    end_time = timeit.default_timer()
     np.savetxt('A.txt',A)
     np.savetxt('b.txt',bA)
     np.savetxt('error.txt',eA)
     np.savetxt('secret_key.txt',sA)
-    end_time = timeit.default_timer()
-    l_b.append(end_time - start_time)
     
+    t = end_time - start_time
+    l_b.append(t)
+#print(len(l_b))
+g = sum(l_b)/100
+print(g)
+# prints the total time taken to run the program.
+print("time in milliseconds: ",g*1000)
+
+#print("Total time taken in seconds: ",end_time - start_time)
+
+
 #print(len(l_b))
 
 # prints the total time taken to run the program.
-print(sum(l_b)/1)
 #print("Total time taken in seconds: ",end_time - start_time)
