@@ -1,15 +1,15 @@
 '''
 This is a basic implementation of our PQPBA scheme which is based on LWE problem.
-General LWE problem is as follows : b = (<a,s> + e )mod q. But in our scheme we replace matrix s with s xor p. where p is the
+General LWE problem is as follows : b = (a.s + e )mod q. But in our scheme we replace matrix s with s xor p. where p is the
 user chosen password. 
-Hence, the modified LWE problem is as follows: b = (<a,K> + e) mod q ; K = s xor P.
+Hence, the modified LWE problem is as follows: b = (a.K + e) mod q ; K = s xor P.
 
 Parameters of the LWE problem: 
 
     A :- m x n
-    e :- m x 1
-    s :- n x 1
-    b :- m x 1
+    e :- m x l
+    s :- n x l
+    b :- m x l
     q :- size of the field contains elements from {0,....,q-1}
     m:- number of equations
     n:- number of variables
@@ -25,52 +25,49 @@ from operator import matmul
 
 
 
-# value of q for computing the lwe problem is picked at random
+# value of q = 2**16 for computing the lwe problem
+#q=8380417
 
-q=8380417
-#print("Value of q\n",q)
+q=8191
 
 # value of m and n
-m = 256
-n = 256
+m = 192
+n = 192
+l = 80
 
 # empty list to store all the values of b
 l_b = [] 
-for i in range(0,100):
+for i in range(0,1):
     
-    # The random matrix a is generated
+    # The random matrix A is generated
     A = np.loadtxt('A.txt')
     A = A.astype(int)
-    #print(A.shape)
-    #print("Value of random matrix A is: \n",A)
-
     
     # loads the value of matrix b 
     b = np.loadtxt('b.txt')
     b = b.astype(float)
-    bA = b.reshape((m,1))
+    bA = b.reshape((m,l))
 
 
     # old secret key matrix is loaded
     
     old_sa = np.loadtxt('secret_key.txt')
     old_sa = old_sa.astype(int)
-    old_sA = old_sa.reshape((n,1))
+    old_sA = old_sa.reshape((n,l))
 
     # error matrix 
     # Set the desired range for the normal distribution
     ea = np.loadtxt('error.txt')
     ea = ea.astype(float)
-    eA = ea.reshape((m,1))
+    eA = ea.reshape((m,l))
 
     
     start_time = timeit.default_timer()
     # new matrix is created
-    new_sA = np.random.randint(0,(q)-1,size = (n,1))
+    new_sA = np.random.randint(0,(q)-1,size = (n,l))
     # new matrix is xored with old one
     sA = np.bitwise_xor(old_sA,new_sA)
 
-    
 
     # user chosen password is mapped into a matrix 
     P = password_matrix.compute_password_matrix()
@@ -85,36 +82,17 @@ for i in range(0,100):
     final = x%q # final = secret value xor password = K
     # convert the float value to int 
     final = final.astype(int)
-    final = final.reshape((m,1))
+    final = final.reshape((m,l))
     
     # received sA = old_sA xor new_sA. So, sA xor old_sA xor password = new_sA xor Password
     K_new = np.bitwise_xor(sA,final)
     # new value of b is computed
     b_new = np.matmul(A,K_new)%q
     b_new = np.add(b_new,eA)%q
-    
-    
-    '''# K = value of xor of secret key matrix and password matrix
-    K = np.bitwise_xor(sA,P) 
-    #print("Value of sA xor password: ",K) 
-    #print("size of secret key: ",K.size)
-    bA_new = np.matmul(A,K)%q
-    bA_new = np.add(bA_new,eA)%q
-    '''
+    #print("b value changed successfully")
     end_time = timeit.default_timer()
     t = end_time - start_time
     l_b.append(t)
-#print(len(l_b))
-g = sum(l_b)/100
-print(g)
-# prints the total time taken to run the program.
-print("time in milliseconds: ",g*1000)
 
-#print("Total time taken in seconds: ",end_time - start_time)
-
-
-#print(len(l_b))
-
-# prints the total time taken to run the program.
-#print(sum(l_b)/1)
-#print("Total time taken in seconds: ",end_time - start_time)
+g = sum(l_b)/1
+print("time in seconds: ",g)
