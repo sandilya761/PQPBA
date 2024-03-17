@@ -10,9 +10,11 @@ from numpy import random
 from mlsocket import MLSocket
 
 # creates a new secret key new_sA
-n = 256
-q = 8380417
-new_sA = np.random.randint(0,(q)-1,size = (n,1))
+m = 192
+n = 192
+l = 80
+q = 8191
+new_sA = np.random.randint(0,(q)-1,size = (n,l))
 
 
 
@@ -27,16 +29,13 @@ def gen_new_key():
     old_sa = old_sa.astype(int)
        
     # XORs the old_sA value with new_sA value 
-    old_sA = old_sa.reshape((n,1))
+    old_sA = old_sa.reshape((n,l))
     sA = np.bitwise_xor(old_sA,new_sA)
 
-    #print("Value of XOR of old sA and new sA: \n", sA)
     # loads the error matrix from error.txt file
     ea = np.loadtxt('../Secure_server_database/error.txt')
     ea = ea.astype(float)
-    
-    # converts the size form (256,) to (256,1)
-    eA = ea.reshape((n,1))
+    eA = ea.reshape((m,l))
     
     # sends the sA value and eA to the website
 
