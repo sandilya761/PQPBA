@@ -12,16 +12,17 @@ from numpy import random
 def send_sA_eA():
     HOST = '127.0.0.1'
     PORT = 65435
-
-    n = 256
+    m = 192
+    n = 192
+    l = 80
     # secret key matrix is loaded from secret_key.txt
     sa = np.loadtxt('../Secure_server_database/secret_key.txt')
     sa = sa.astype(int)
-    sA = sa.reshape((n,1))
+    sA = sa.reshape((m,l))
     # error matrix is loaded from error.txt
     ea = np.loadtxt('../Secure_server_database/error.txt')
     ea = ea.astype(float)
-    eA = ea.reshape((n,1))
+    eA = ea.reshape((n,l))
 
 
     # Send data
