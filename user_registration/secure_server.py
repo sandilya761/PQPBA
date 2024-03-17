@@ -12,11 +12,11 @@ from numpy import random
 def send_sA():
     HOST = '127.0.0.1'
     PORT = 65435
-
-    n = 256
-    q = 8380417
+    n = 192
+    l = 80
+    q = 8191
     # secret key matrix is generated
-    sA = np.random.randint(0,q-1,size = (n,1)) 
+    sA = np.random.randint(0,q-1,size = (n,l)) 
     # Send data
     with MLSocket() as s:
         # Connect to the port and host
@@ -38,8 +38,7 @@ def receive_error():
         with conn:
             eA = conn.recv(1024) 
     
-    #print("Received error matrix obtained from website: \n",eA)
-
+    
     # store the received error matrix in error.txt
 
     np.savetxt('../Secure_server_database/error.txt',eA)

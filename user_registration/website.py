@@ -1,21 +1,18 @@
 '''
-Website.py is the file where we assume that a user registers his username and password at website.
-As per protocol 1 mentioned in the paper, website contacts the secure server (secure_server.py) and
-obtains the secret key (sA) required to compute the lwe instance (b).
+This is a basic implementation of our PQPBA scheme which is based on LWE problem.
+General LWE problem is as follows : b = (a.s + e )mod q. But in our scheme we replace matrix s with s xor p. where p is the
+user chosen password. 
+Hence, the modified LWE problem is as follows: b = (a.K + e) mod q ; K = s xor P.
 
 Parameters of the LWE problem: 
 
-    A  (random matrix):- m x n
-    eA (error matrix) :- m x 1
-    sA (secret key matrix) :- n x 1
-    bA (final matrix) :- m x 1
-    P (password matrix) :- n x 1
-    q  :- size of the field contains elements from {0,....,q-1}
+    A :- m x n
+    e :- m x l
+    s :- n x l
+    b :- m x l
+    q :- size of the field contains elements from {0,....,q-1}
     m:- number of equations
     n:- number of variables
-
-Values of m and n are taken same as Dilithium parameters as suggested in 
-round 3 NIST report"
 '''
 
 from mlsocket import MLSocket
@@ -25,12 +22,16 @@ from numpy import random
 import timeit
 import password_matrix
 
-# Initialize the values of m and n respectively.
-m = 256
-n = 256
+# value of q is taken as 2**16for computing the lwe problem
+
+q = 8191
+
+# value of m, n, l
+m = 192
+n = 192
+l = 80
 
 # error matrix is generated using normal distribution function
-q = 8380417 # value of q (field size) for computing the lwe problem.
 # Set the desired range for the normal distribution
 lower_bound = -q/4
 upper_bound = q/4
@@ -39,7 +40,7 @@ upper_bound = q/4
 mean = 0
 std_dev = 1
 # Generate random numbers from the normal distribution
-eA = np.random.normal(mean, std_dev, size=(m,1))
+eA = np.random.normal(mean, std_dev, size=(m,l))
 
 # Truncate the random numbers to the desired range
 eA = np.clip(eA, lower_bound, upper_bound)
@@ -53,14 +54,14 @@ def compute_b():
         s.bind((HOST, PORT))
         s.listen()
         conn, address = s.accept()
-        start_time = timeit.default_timer()
         
         # This will block until it receives all the data send by the client, with the step size of 1024 bytes.
         with conn:
             data = conn.recv(1024) 
-    #print("Secret key obtained from secure server: \n",data)
     
     # The random matrix a is generated
+    start_time = timeit.default_timer()
+    
     A = np.random.randint(0,(q)-1,size = (m,n))
      
     
@@ -72,12 +73,11 @@ def compute_b():
     
     bA = np.matmul(A,K)%q
     bA = np.add(bA,eA)%q
-    #print("\nValue of b: \n",bA.shape)
     
     end_time = timeit.default_timer()
     total_time = end_time - start_time
     print("Registration Success!!")
-    print("\nTotal time taken in seconds: ", end_time - start_time)
+    #print("\nTotal time taken in seconds: ", end_time - start_time)
     # Storing the matrices at database
     np.savetxt('../Website_database/A.txt',A) 
     np.savetxt('../Website_database/b.txt',bA) 
