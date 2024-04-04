@@ -1,3 +1,7 @@
+'''This file is used to calculate inverse modulo matrix. This code is taken
+from https://stackoverflow.com/questions/4287721/easiest-way-to-perform-modular-matrix-inversion-with-python
+'''
+
 import numpy as np
 from ctypes import sizeof
 from operator import matmul
