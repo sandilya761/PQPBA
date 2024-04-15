@@ -1,6 +1,6 @@
 '''
 password_matrix.py file salts the password and convert into its hashed form.
-Hashed passsword is converted into a matrix of required dimension (m x n). 
+Hashed passsword is converted into a matrix of required dimension (n x l). 
 '''
 import hashlib
 import numpy as np
